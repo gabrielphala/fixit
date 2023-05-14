@@ -1,0 +1,138 @@
+<div class="container">
+    <%- include('../partials/sidenav/user') %>
+    <div class="container__main container__main--sidenav-closed">
+        <%- include('../partials/header/user') %>
+
+        <div class="container__main__title flex flex--a-center">
+            <img src="/assets/illustrations/note.svg" alt="Note">
+            <div class="container__main__title__sep"></div>
+            <div class="container__main__title__details">
+                <h1>Repair tickets</h1>
+                <p>Monitor all your repair tickets from here</p>
+            </div>
+        </div>
+        <div class="container__main__center">
+            <div class="container__main__center__search">
+                <div class="container__main__center__search__search-box input">
+                    <input type="text" name="" id="" placeholder="Search">
+                    <svg class="image--icon pos--abs pos--vertical">
+                        <use href="#search"></use>
+                    </svg>
+                </div>
+                <div class="container__main__center__search__options flex flex--j-space-between">
+                    <div class="container__main__center__search__options__filter flex flex--a-center">
+                        <svg class="image--icon">
+                            <use href="#filter"></use>
+                        </svg>
+                        <p>filter by</p>
+                    </div>
+                    <div class="container__main__center__search__options__download flex">
+                        <svg class="image--icon">
+                            <use href="#download"></use>
+                        </svg>
+                        <p>Generate reports</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card table" style="margin: 3rem 0;">
+                <div class="table__header">
+                    <ul class="table__header__row flex">
+                        <li class="table__header__row__item">#</li>
+                        <li class="table__header__row__item">Ticket no</li>
+                        <li class="table__header__row__item">Issue count</li>
+                        <li class="table__header__row__item">Status</li>
+                        <li class="table__header__row__item">Request date</li>
+                    </ul>
+                </div>
+                <div class="table__body" id="ticket-list">
+                    <ul class="table__body__row"></ul>
+                </div>
+                <div class="card__body empty flex flex--a-center" id="no-tickets" style="display: none;">
+                    <img src="/assets/illustrations/no-data.svg" alt="No data">
+                    <div class="empty_caption">
+                        <h1>Tickets not found</h1>
+                        <p>There aren't any tickets at the moment.</p>
+                        <p>Tickets of your repair requets will appear here</p>
+                    </div>
+                </div>
+            </div>
+
+            <button class="btn btn--primary open-ticket-modal">Log repair</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal modal--closed" id="ticket-modal">
+    <form class="modal__main card" id="ticket-form" style="width: 80rem;">
+        <div class="card__header card__header--no-border flex flex--a-center flex--j-space-between">
+            <div class="card__header__left">
+                <h1>Get ticket</h1>
+                <p>List issues to fix</p>
+            </div>
+            <svg class="image--icon close-ticket-modal">
+                <use href="#cross"></use>
+            </svg>
+        </div>
+        <div class="card__body modal__main__illustration-form flex">
+            <div class="modal__main__illustration-form__main">
+                <div class="basic-error-container flex--a-center hide" id="repair-error">
+                    <svg class="image--icon margin--right-1">
+                        <use href="#exclamation"></use>
+                    </svg>
+                    <h4>Here</h4>
+                </div>
+                <div id="speciality-selection-container" style="height: 18rem; overflow-y: auto;">
+                    <input type="text" id="speciality-count" value="1" hidden>
+                    <div class="input" id="speciality-item-1" style="margin-top: 1.4rem;">
+                        <label for="speciality-1" id="speciality-1-label">Speciality: 1</label>
+                        <div class="flex flex--a-center">
+                            <select id="speciality-1" class="speciality__item" style="flex: 1;">
+                                <option value="select">Select</option>
+                                <option value="ram">Ram</option>
+                                <option value="rom">Rom</option>
+                                <option value="screen">Screen</option>
+                                <option value="charging port">Charging port</option>
+                            </select>
+                            <svg class="image--icon" style="margin-left: 1rem; fill: #b68c8c;" id="delete-item-1">
+                                <use href="#cancel"></use>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <img src="/assets/illustrations/fixsvg.svg" alt="">
+        </div>
+        <div class="card__footer">
+            <button class="btn btn--primary">Generate ticket</button>
+            <button class="btn btn--primary" id="add-issue" type="button">Add issue</button>
+            <button class="btn close-lecturer-modal" type="button">Cancel</button>
+        </div>
+    </form>
+</div>
+
+<script src="/assets/js/dist/jquery.js"></script>
+
+<script type="module">
+    import { openModal, closeModal } from "/assets/js/src/helpers/modal.js"
+    import { createSpecialityItem, removeSpecialityItem } from "/assets/js/src/helpers/speciality-selection.js"
+    import Ticket from "/assets/js/src/auth/Ticket.js"
+
+    $('.open-ticket-modal').on('click', e => openModal('ticket'));
+
+    $('.close-ticket-modal').on('click', e => closeModal('ticket'));
+
+    $('#add-issue').on('click', e => createSpecialityItem());
+
+    $('#delete-item-1').on('click', e => removeSpecialityItem(1))
+
+    $('#ticket-form').on('submit', e => {
+        e.preventDefault();
+
+        Ticket.add()
+    });
+
+    $(() => {
+        Ticket.get_by_user();
+    })
+</script>

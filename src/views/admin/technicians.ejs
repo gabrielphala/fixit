@@ -1,0 +1,206 @@
+<div class="container">
+    <%- include('../partials/sidenav/admin') %>
+    <div class="container__main container__main--sidenav-closed">
+        <%- include('../partials/header/admin') %>
+
+        <div class="container__main__title flex flex--a-center">
+            <img src="/assets/illustrations/person.svg" alt="Note">
+            <div class="container__main__title__sep"></div>
+            <div class="container__main__title__details">
+                <h1>Technicians</h1>
+                <p>Manage all your technicians from here</p>
+            </div>
+        </div>
+        <div class="container__main__center">
+            <div class="container__main__center__search">
+                <div class="container__main__center__search__search-box input">
+                    <input type="text" name="" id="" placeholder="Search">
+                    <svg class="image--icon pos--abs pos--vertical">
+                        <use href="#search"></use>
+                    </svg>
+                </div>
+                <div class="container__main__center__search__options flex flex--j-space-between">
+                    <div class="container__main__center__search__options__filter flex flex--a-center">
+                        <svg class="image--icon">
+                            <use href="#filter"></use>
+                        </svg>
+                        <p>filter by</p>
+                    </div>
+                    <div class="container__main__center__search__options__download flex">
+                        <svg class="image--icon">
+                            <use href="#download"></use>
+                        </svg>
+                        <p>Generate reports</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card table" style="margin: 3rem 0; overflow: unset;">
+                <div class="table__header">
+                    <ul class="table__header__row flex">
+                        <li class="table__header__row__item">#</li>
+                        <li class="table__header__row__item">Last name</li>
+                        <li class="table__header__row__item">Initials</li>
+                        <li class="table__header__row__item">Staff no</li>
+                        <li class="table__header__row__item">Added on</li>
+                    </ul>
+                </div>
+                <div class="table__body" id="user-list">
+                    <ul class="table__body__row"></ul>
+                </div>
+                <div class="card__body empty flex flex--a-center" id="no-users" style="display: none;">
+                    <img src="/assets/illustrations/no-data.svg" alt="No data">
+                    <div class="empty_caption">
+                        <h1>Technicians not found</h1>
+                        <p>There aren't any technicians at the moment.</p>
+                        <p>Technicians will appear here when available.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex open-technician-modal anchor"></p>
+                <svg class="image--icon" style="margin-right: 1rem;">
+                    <use href="#user-add"></use>
+                </svg>
+                <p>Add new technician</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal modal--closed" id="technician-modal">
+    <form class="modal__main card" id="technician-form" style="width: 80rem;">
+        <div class="card__header card__header--no-border flex flex--a-center flex--j-space-between">
+            <div class="card__header__left">
+                <h1>New technician</h1>
+                <p>Add new technician</p>
+            </div>
+            <svg class="image--icon close-technician-modal">
+                <use href="#cross"></use>
+            </svg>
+        </div>
+        <div class="card__body modal__main__illustration-form flex">
+            <div class="modal__main__illustration-form__main">
+                <div class="basic-error-container flex--a-center hide" id="user-add-error">
+                    <svg class="image--icon margin--right-1">
+                        <use href="#exclamation"></use>
+                    </svg>
+                    <h4>Here</h4>
+                </div>
+                <div class="twin-inputs flex flex--j-space-between">
+                    <div class="input">
+                        <input type="text" id="user-lastname" placeholder="Last name">
+                    </div>
+                    <div class="input">
+                        <input type="text" id="user-initials" placeholder="Initials">
+                    </div>
+                </div>
+                
+                <div class="input" style="margin-top: 1.4rem;">
+                    <input type="text" id="user-id" placeholder="Staff number">
+                </div>
+
+                <div id="speciality-selection-container" style="height: 18rem; overflow-y: auto;">
+                    <input type="text" id="speciality-count" value="1" hidden>
+                    <div class="input" id="speciality-item-1" style="margin-top: 1.4rem;">
+                        <label for="speciality-1" id="speciality-1-label">Speciality: 1</label>
+                        <div class="flex flex--a-center">
+                            <select id="speciality-1" class="speciality__item" style="flex: 1;">
+                                <option value="select">Select</option>
+                                <option value="ram">Ram</option>
+                                <option value="rom">Rom</option>
+                                <option value="screen">Screen</option>
+                                <option value="charging port">Charging port</option>
+                            </select>
+                            <svg class="image--icon" style="margin-left: 1rem; fill: #b68c8c;" id="delete-item-1">
+                                <use href="#cancel"></use>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <img src="/assets/illustrations/fixsvg.svg" alt="">
+        </div>
+        <div class="card__footer">
+            <button class="btn btn--primary">Add technician</button>
+            <button class="btn btn--primary" id="add-speciality" type="button">Add speciality</button>
+            <button class="btn close-technician-modal" type="button">Cancel</button>
+        </div>
+    </form>
+</div>
+
+<div class="modal modal--closed" id="user-update-modal">
+    <form class="modal__main card" id="user-update-form">
+        <div class="card__header card__header--no-border flex flex--a-center flex--j-space-between">
+            <div class="card__header__left">
+                <h1>Update technician</h1>
+                <p>Edit technician info</p>
+            </div>
+            <svg class="image--icon close-user-update-modal">
+                <use href="#cross"></use>
+            </svg>
+        </div>
+        <div class="card__body modal__main__illustration-form">
+            <div class="basic-error-container flex--a-center hide" id="user-update-error">
+                <svg class="image--icon margin--right-1">
+                    <use href="#exclamation"></use>
+                </svg>
+                <h4>Here</h4>
+            </div>
+
+            <input type="text" id="edit-user-row-id" hidden>
+
+            <div class="twin-inputs flex flex--j-space-between">
+                <div class="input">
+                    <input type="text" id="edit-user-lastname" placeholder="Last name">
+                </div>
+                <div class="input">
+                    <input type="text" id="edit-user-initials" placeholder="Initials">
+                </div>
+            </div>
+
+            <div class="input" style="margin-top: 1.4rem;">
+                <input type="text" id="edit-user-id" placeholder="Staff number">
+            </div>
+        </div>
+        <div class="card__footer">
+            <button class="btn btn--primary">Update technician</button>
+            <button class="btn close-user-update-modal" type="button">Cancel</button>
+        </div>
+    </form>
+</div>
+
+<script src="/assets/js/dist/jquery.js"></script>
+
+<script type="module">
+    import { openModal, closeModal } from "/assets/js/src/helpers/modal.js"
+    import { createSpecialityItem, removeSpecialityItem } from "/assets/js/src/helpers/speciality-selection.js"
+    import User from "/assets/js/src/auth/User.js"
+
+    $('.open-technician-modal').on('click', e => openModal('technician'));
+
+    $('.close-technician-modal').on('click', e => closeModal('technician'));
+
+    $('.close-user-update-modal').on('click', e => closeModal('user-update'));
+
+    $('#add-speciality').on('click', e => createSpecialityItem());
+
+    $('#delete-item-1').on('click', e => removeSpecialityItem(1))
+
+
+    $('#technician-form').on('submit', e => {
+        e.preventDefault();
+
+        User.add('technician')
+    });
+
+    $('#user-update-form').on('submit', e => {
+        e.preventDefault();
+
+        User.update('technician')
+    });
+
+    $(() => {
+        User.fetch_all('technician');
+    })
+</script>

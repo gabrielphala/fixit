@@ -1,0 +1,73 @@
+<div class="container">
+    <%- include('../partials/sidenav/user') %>
+    <div class="container__main container__main--sidenav-closed">
+        <%- include('../partials/header/user') %>
+
+        <div class="container__main__title flex flex--a-center">
+            <img src="/assets/illustrations/note.svg" alt="Note">
+            <div class="container__main__title__sep"></div>
+            <div class="container__main__title__details">
+                <h1>New repair tickets</h1>
+                <p>Monitor all your ongoing repair requets from here</p>
+            </div>
+        </div>
+        <div class="container__main__center">
+            <div class="container__main__center__search">
+                <div class="container__main__center__search__search-box input">
+                    <input type="text" name="" id="" placeholder="Search">
+                    <svg class="image--icon pos--abs pos--vertical">
+                        <use href="#search"></use>
+                    </svg>
+                </div>
+                <div class="container__main__center__search__options flex flex--j-space-between">
+                    <div class="container__main__center__search__options__filter flex flex--a-center">
+                        <svg class="image--icon">
+                            <use href="#filter"></use>
+                        </svg>
+                        <p>filter by</p>
+                    </div>
+                    <div class="container__main__center__search__options__download flex">
+                        <svg class="image--icon">
+                            <use href="#download"></use>
+                        </svg>
+                        <p>Generate reports</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card table" style="margin: 3rem 0;">
+                <div class="table__header">
+                    <ul class="table__header__row flex">
+                        <li class="table__header__row__item">#</li>
+                        <li class="table__header__row__item">Ticket no</li>
+                        <li class="table__header__row__item">Requested by</li>
+                        <li class="table__header__row__item">Request date</li>
+                        <li class="table__header__row__item">Action</li>
+                    </ul>
+                </div>
+                <div class="table__body" id="ticket-list">
+                    <ul class="table__body__row"></ul>
+                </div>
+                <div class="card__body empty flex flex--a-center" id="no-tickets">
+                    <img src="/assets/illustrations/no-data.svg" alt="No data">
+                    <div class="empty_caption">
+                        <h1>Tickets not found</h1>
+                        <p>There aren't any tickets at the moment.</p>
+                        <p>Tickets will appear here when repairs are required.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="/assets/js/dist/jquery.js"></script>
+
+<script type="module">
+    import Ticket from "/assets/js/src/auth/Ticket.js"
+
+    $(() => {
+        Ticket.get_by_technician();
+    })
+</script>

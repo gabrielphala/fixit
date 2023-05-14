@@ -1,0 +1,66 @@
+.container{
+    &__main{
+        position: relative;
+        padding-left: 30rem;
+
+        &--sidenav-closed{
+            padding-left: 5.5rem;
+        }
+
+        &__title{
+            padding: 9rem 3rem 2rem;
+            margin-bottom: 3rem;
+            background-color: #e1dede;
+
+            img{
+                width: 3rem;
+            }
+
+            &__sep{
+                flex: 0 0 2px;
+                height: 3rem;
+                margin: 0 1.4rem;
+                background-color: #656565;
+            }
+
+            &__details{
+                p {
+                    color: #8c8c8c;
+                }
+            }
+        }
+
+        &__center{
+            padding: 0 25%;
+
+            &__search{
+                position: relative;
+
+                &__search-box{
+                    input{
+                        border-radius: 13px;
+                        border-color: #c0c0c0;
+                    }
+
+                    svg{
+                        right: 1.4rem;
+                        z-index: 2;
+                        fill: #7e7e7e;
+                    }
+                }
+
+                &__options{
+                    margin-top: 1rem;
+
+                    &__filter, &__download{
+                        svg{
+                            width: 1.5rem;
+                            height: 1.5rem;
+                            margin-right: .7rem;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,179 @@
+<div class="container">
+    <%- include('../partials/sidenav/admin') %>
+    <div class="container__main container__main--sidenav-closed">
+        <%- include('../partials/header/admin') %>
+
+        <div class="container__main__title flex flex--a-center">
+            <img src="/assets/illustrations/person.svg" alt="Note">
+            <div class="container__main__title__sep"></div>
+            <div class="container__main__title__details">
+                <h1>Students</h1>
+                <p>Manage all your students from here</p>
+            </div>
+        </div>
+        <div class="container__main__center">
+            <div class="container__main__center__search">
+                <div class="container__main__center__search__search-box input">
+                    <input type="text" name="" id="" placeholder="Search">
+                    <svg class="image--icon pos--abs pos--vertical">
+                        <use href="#search"></use>
+                    </svg>
+                </div>
+                <div class="container__main__center__search__options flex flex--j-space-between">
+                    <div class="container__main__center__search__options__filter flex flex--a-center">
+                        <svg class="image--icon">
+                            <use href="#filter"></use>
+                        </svg>
+                        <p>filter by</p>
+                    </div>
+                    <div class="container__main__center__search__options__download flex">
+                        <svg class="image--icon">
+                            <use href="#download"></use>
+                        </svg>
+                        <p>Generate reports</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card table" style="margin: 3rem 0; overflow: unset;">
+                <div class="table__header">
+                    <ul class="table__header__row flex">
+                        <li class="table__header__row__item">#</li>
+                        <li class="table__header__row__item">Last name</li>
+                        <li class="table__header__row__item">Initials</li>
+                        <li class="table__header__row__item">Student no</li>
+                        <li class="table__header__row__item">Added on</li>
+                    </ul>
+                </div>
+                <div class="table__body" id="user-list">
+                    <ul class="table__body__row"></ul>
+                </div>
+                <div class="card__body empty flex flex--a-center" id="no-users" style="display: none;">
+                    <img src="/assets/illustrations/no-data.svg" alt="No data">
+                    <div class="empty_caption">
+                        <h1>Students not found</h1>
+                        <p>There aren't any students at the moment.</p>
+                        <p>Students will appear here when available.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex open-student-modal anchor">
+                <svg class="image--icon" style="margin-right: 1rem;">
+                    <use href="#user-add"></use>
+                </svg>
+                <p>Add new student</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal modal--closed" id="student-modal">
+    <form class="modal__main card" id="student-form">
+        <div class="card__header card__header--no-border flex flex--a-center flex--j-space-between">
+            <div class="card__header__left">
+                <h1>New student</h1>
+                <p>Add new student</p>
+            </div>
+            <svg class="image--icon close-student-modal">
+                <use href="#cross"></use>
+            </svg>
+        </div>
+        <div class="card__body modal__main__illustration-form">
+            <div class="basic-error-container flex--a-center hide" id="user-add-error">
+                <svg class="image--icon margin--right-1">
+                    <use href="#exclamation"></use>
+                </svg>
+                <h4>Here</h4>
+            </div>
+            
+            <div class="twin-inputs flex flex--j-space-between">
+                <div class="input">
+                    <input type="text" id="user-lastname" placeholder="Last name">
+                </div>
+                <div class="input">
+                    <input type="text" id="user-initials" placeholder="Initials">
+                </div>
+            </div>
+            
+            <div class="input" style="margin-top: 1.4rem;">
+                <input type="text" id="user-id" placeholder="Student number">
+            </div>
+        </div>
+        <div class="card__footer">
+            <button class="btn btn--primary">Add student</button>
+            <button class="btn close-student-modal" type="button">Cancel</button>
+        </div>
+    </form>
+</div>
+
+<div class="modal modal--closed" id="user-update-modal">
+    <form class="modal__main card" id="user-update-form">
+        <div class="card__header card__header--no-border flex flex--a-center flex--j-space-between">
+            <div class="card__header__left">
+                <h1>Update student</h1>
+                <p>Edit student info</p>
+            </div>
+            <svg class="image--icon close-user-update-modal">
+                <use href="#cross"></use>
+            </svg>
+        </div>
+        <div class="card__body modal__main__illustration-form">
+            <div class="basic-error-container flex--a-center hide" id="user-update-error">
+                <svg class="image--icon margin--right-1">
+                    <use href="#exclamation"></use>
+                </svg>
+                <h4>Here</h4>
+            </div>
+
+            <input type="text" id="edit-user-row-id" hidden>
+
+            <div class="twin-inputs flex flex--j-space-between">
+                <div class="input">
+                    <input type="text" id="edit-user-lastname" placeholder="Last name">
+                </div>
+                <div class="input">
+                    <input type="text" id="edit-user-initials" placeholder="Initials">
+                </div>
+            </div>
+
+            <div class="input" style="margin-top: 1.4rem;">
+                <input type="text" id="edit-user-id" placeholder="Student number">
+            </div>
+        </div>
+        <div class="card__footer">
+            <button class="btn btn--primary">Update student</button>
+            <button class="btn close-user-update-modal" type="button">Cancel</button>
+        </div>
+    </form>
+</div>
+
+<script src="/assets/js/dist/jquery.js"></script>
+
+<script type="module">
+    import { openModal, closeModal } from "/assets/js/src/helpers/modal.js"
+    import { createSpecialityItem, removeSpecialityItem } from "/assets/js/src/helpers/speciality-selection.js"
+    import User from "/assets/js/src/auth/User.js"
+
+    $('.open-student-modal').on('click', e => openModal('student'));
+
+    $('.close-student-modal').on('click', e => closeModal('student'));
+
+    $('.close-user-update-modal').on('click', e => closeModal('user-update'));
+
+    $('#student-form').on('submit', e => {
+        e.preventDefault();
+
+        User.add('student')
+    });
+
+    $('#user-update-form').on('submit', e => {
+        e.preventDefault();
+
+        User.update('student')
+    });
+
+    $(() => {
+        User.fetch_all('student');
+    })
+</script>

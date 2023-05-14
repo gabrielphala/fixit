@@ -1,0 +1,70 @@
+.login{
+    &__illustration{
+        position: relative;
+        flex: 0 0 30rem;
+        background-color: #f50057;
+        height: 100vh;
+
+        &__main{
+            img{
+                width: 19rem;
+            }
+
+            h1{
+                margin-top: 3rem;
+                color: #ffb6d0;
+            }
+
+            p{
+                color: #49001a;
+            }
+
+            h1, p{
+                text-align: center;
+            }
+        }
+    }
+
+    &__form{
+        flex: 0 0 35rem;
+        margin-left: 10rem;
+        margin-top: 10rem;
+
+        &__header{
+            &__logo{
+                margin-bottom: 5rem;
+
+                img{
+                    width: 5rem;
+                    margin-right: 1rem;
+                }
+            }
+
+            &__title{
+                margin-bottom: 2rem;
+
+                p{
+                    color: #939292;
+                }
+            }
+        }
+
+        &__body{
+            margin-bottom: 3rem;
+
+            .input:not(:last-child){
+                margin-bottom: 1.4rem;
+            }
+
+            button{
+                width: 100%;
+                margin-top: 2rem;
+                padding: 1rem 1.4rem;
+            }
+        }
+
+        &__footer{
+            color: #939292;
+        }
+    }
+}
