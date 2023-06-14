@@ -56,9 +56,10 @@ export const formatTicketsTechnician = (tickets) => {
             <ul class="table__body__row table__body__row--ticket" data-ticketid="${ticket.id}">
                 <li class="table__body__row__item">${count}</li>
                 <li class="table__body__row__item">${ticket.ticket_no}</li>
+                <li class="table__body__row__item">${ticket.status}</li>
                 <li class="table__body__row__item">${ticket.lastname} ${ticket.initials}</li>
                 <li class="table__body__row__item">${getStaticDate(ticket.added_on)}</li>
-                <li class="table__body__row__item"><button class="btn btn--primary">Finish repair</button></li>
+                <li class="table__body__row__item table__body__row__item--finish" data-ticketid="${ticket.id}"><button class="btn btn--primary">Finish repair</button></li>
             </ul>
         `;
 

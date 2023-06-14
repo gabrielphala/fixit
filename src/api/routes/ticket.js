@@ -6,4 +6,5 @@ module.exports = (router) => {
     router.post('/ticket/fetch/all', base_controller.wrap(ticket_service.fetch_all));
     router.post('/ticket/fetch/user', base_controller.wrap_with_store(ticket_service.get_by_user));
     router.post('/ticket/fetch/technician', base_controller.wrap_with_store(ticket_service.get_by_technician));
+    router.post('/ticket/finish-repair', base_controller.wrap_with_store(ticket_service.finishRepair));
 };

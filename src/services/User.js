@@ -110,6 +110,30 @@ module.exports = class StudentService {
         } catch (e) { throw e; }
     }
 
+    static async searchStudents (wrap_res, body) {
+        try {
+            wrap_res.users = await User.searchStudents(body.query);
+
+            return wrap_res;
+        } catch (e) { throw e; }
+    }
+
+    static async searchTechnicians (wrap_res, body) {
+        try {
+            wrap_res.users = await User.searchTechnicians(body.query);
+
+            return wrap_res;
+        } catch (e) { throw e; }
+    }
+
+    static async searchLecturers (wrap_res, body) {
+        try {
+            wrap_res.users = await User.searchLecturers(body.query);
+
+            return wrap_res;
+        } catch (e) { throw e; }
+    }
+
     static async delete (wrap_res, body) {
         try {
             await User.delete(body.user_id);

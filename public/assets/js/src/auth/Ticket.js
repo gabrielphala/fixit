@@ -11,6 +11,25 @@ import {
     formatTicketsTechnician
 } from "../helpers/format.js"
 
+let cachedUserTickets = [];
+let cachedTechnicianTickets = [];
+
+const uTicketHeader = [
+    '#', 'Ticket no', 'Issue Count', 'Status', 'Request date'
+]
+
+const uAllowedColumns = [
+    'ticket_no', 'item_count', 'status', 'added_on'
+]
+
+const tTicketHeader = [
+    '#', 'Ticket no', 'Status', 'Requested by', 'Request date'
+]
+
+const tAllowedColumns = [
+    'ticket_no', 'item_count', 'status', 'lastname', 'added_on'
+]
+
 export default class Ticket {
     static async add () {
         const items = [];
@@ -53,6 +72,14 @@ export default class Ticket {
         }
     }
 
+    static async finishRepair (ticket_id) {
+        const response = await fetch(`/ticket/finish-repair`, {
+            body: {
+                ticket_id
+            }
+        })
+    }
+
     static async fetch_all () {
         const response = await fetch(`/ticket/fetch/all`) 
 
@@ -69,8 +96,21 @@ export default class Ticket {
         const response = await fetch(`/ticket/fetch/technician`) 
 
         if (arrayNotEmpty(response.tickets)) {
+            cachedTechnicianTickets = response.tickets;
+
             $('#no-tickets').hide();
-            return $('#ticket-list').html(formatTicketsTechnician(response.tickets));
+            
+            $('#ticket-list').html(formatTicketsTechnician(response.tickets));
+            
+            $('.table__body__row__item--finish').off();
+            
+            $('.table__body__row__item--finish').on('click', e => {
+                const ticketid = e.currentTarget.dataset.ticketid;
+                
+                Ticket.finishRepair(ticketid);
+            })
+
+            return;
         }
             
         $('#no-tickets').show();
@@ -81,11 +121,51 @@ export default class Ticket {
         const response = await fetch(`/ticket/fetch/user`) 
 
         if (arrayNotEmpty(response.tickets)) {
+            cachedUserTickets = response.tickets;
+            
             $('#no-tickets').hide();
             return $('#ticket-list').html(formatTicketsUser(response.tickets));
         }
             
         $('#no-tickets').show();
         return $('#ticket-list').html('');
+    }
+
+    static async downloadUserCSV () {
+        const response = await fetch('/download/csv', {
+            body: {
+                data: cachedUserTickets,
+                tableHeader: uTicketHeader,
+                allowedColumns: uAllowedColumns,
+                reportName: 'Tickets'
+            }
+        });
+
+        if (response.successful) {
+            const anchor = $('#download-anchor')
+
+            anchor.attr('href', `/assets/downloads/tmp/${response.filename}`)
+
+            anchor[0].click();
+        }
+    }
+
+    static async downloadTechnicialCSV () {
+        const response = await fetch('/download/csv', {
+            body: {
+                data: cachedTechnicianTickets,
+                tableHeader: tTicketHeader,
+                allowedColumns: tAllowedColumns,
+                reportName: 'Tickets'
+            }
+        });
+
+        if (response.successful) {
+            const anchor = $('#download-anchor')
+
+            anchor.attr('href', `/assets/downloads/tmp/${response.filename}`)
+
+            anchor[0].click();
+        }
     }
 }

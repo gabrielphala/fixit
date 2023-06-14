@@ -16,6 +16,12 @@ module.exports = new (class User extends SQLifier {
         })
     }
 
+    getById (id) {
+        return this.findOne({
+            condition: { id }
+        })
+    }
+
     get_user_by_unique_no (unique_no) {
         return this.findOne({
             condition: { unique_no, is_deleted: false }
@@ -25,6 +31,36 @@ module.exports = new (class User extends SQLifier {
     fetch_all (type) {
         return this.find({
             condition: { type, is_deleted: false }
+        })
+    }
+
+    searchStudents (query) {
+        return this.search({
+            condition: [
+                { lastname: query, type: 'student', is_deleted: false },
+                { initials: query, type: 'student', is_deleted: false },
+                { unique_no: query, type: 'student', is_deleted: false },
+            ]
+        })
+    }
+
+    searchTechnicians (query) {
+        return this.search({
+            condition: [
+                { lastname: query, type: 'technician', is_deleted: false },
+                { initials: query, type: 'technician', is_deleted: false },
+                { unique_no: query, type: 'technician', is_deleted: false },
+            ]
+        })
+    }
+
+    searchLecturers (query) {
+        return this.search({
+            condition: [
+                { lastname: query, type: 'lecturer', is_deleted: false },
+                { initials: query, type: 'lecturer', is_deleted: false },
+                { unique_no: query, type: 'lecturer', is_deleted: false },
+            ]
         })
     }
 

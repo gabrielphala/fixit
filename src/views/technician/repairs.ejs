@@ -21,16 +21,16 @@
                 </div>
                 <div class="container__main__center__search__options flex flex--j-space-between">
                     <div class="container__main__center__search__options__filter flex flex--a-center">
-                        <svg class="image--icon">
+                        <!-- <svg class="image--icon">
                             <use href="#filter"></use>
                         </svg>
-                        <p>filter by</p>
+                        <p>filter by</p> -->
                     </div>
-                    <div class="container__main__center__search__options__download flex">
+                    <div id="download-report" class="container__main__center__search__options__download flex">
                         <svg class="image--icon">
                             <use href="#download"></use>
                         </svg>
-                        <p>Generate reports</p>
+                        <p>Generate CSV report</p>
                     </div>
                 </div>
             </div>
@@ -40,6 +40,7 @@
                     <ul class="table__header__row flex">
                         <li class="table__header__row__item">#</li>
                         <li class="table__header__row__item">Ticket no</li>
+                        <li class="table__header__row__item">Status</li>
                         <li class="table__header__row__item">Requested by</li>
                         <li class="table__header__row__item">Request date</li>
                         <li class="table__header__row__item">Action</li>
@@ -61,6 +62,7 @@
     </div>
 </div>
 
+<a download id="download-anchor"></a>
 
 <script src="/assets/js/dist/jquery.js"></script>
 
@@ -69,5 +71,9 @@
 
     $(() => {
         Ticket.get_by_technician();
+
+        $('#download-report').on('click', e => {
+            Ticket.downloadTechnicialCSV();
+        });
     })
 </script>

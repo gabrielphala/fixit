@@ -1,8 +1,9 @@
 const Ticket = require('../models/Ticket')
 const Speciality = require('../models/Speciality')
+const Repair = require('../models/Repair');
+const User = require('../models/User');
 
 const String = require('../helpers/String');
-const Repair = require('../models/Repair');
 
 module.exports = class TicketService {
     static async add (wrap_res, { items }, { user_info }) {
@@ -37,7 +38,7 @@ module.exports = class TicketService {
                     item,
                     status: 'Pending',
                     ticket_id: new_ticket.id,
-                    technician_id: info.id
+                    technician_id: info.technician_id
                 })
 
                 if (!(attended++)) {
@@ -79,8 +80,38 @@ module.exports = class TicketService {
 
     static async get_by_technician (wrap_res, _, { user_info }) {
         try {
-            console.log(user_info.id);
             wrap_res.tickets = await Ticket.get_by_technician(user_info.id);
+
+            return wrap_res;
+        } catch (e) { throw e; }
+    }
+
+    static async finishRepair (wrap_res, body, { user_info }) {
+        try {
+            const ticket = await Ticket.getById(body.ticket_id);
+
+            await Repair.complete(body.ticket_id, user_info.id);
+
+            const repair = await Repair.getOneByTicket(body.ticket_id);
+
+            if (repair) {
+                repair.status = 'In Progress';
+
+                const technician = await User.getById(repair.technician_id);
+
+                ticket.cur_technician_id = repair.technician_id;
+                ticket.status = `${repair.status} by ${technician.lastname}`;
+
+                repair.save();
+            }
+
+            else {
+                ticket.status = 'Done';
+            }
+
+            ticket.save();
+
+            wrap_res.successful = true;
 
             return wrap_res;
         } catch (e) { throw e; }

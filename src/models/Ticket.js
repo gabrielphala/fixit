@@ -22,6 +22,12 @@ module.exports = new (class Ticket extends SQLifier {
         })
     }
 
+    getById (id) {
+        return this.findOne({
+            condition: { id }
+        })
+    }
+
     get_by_user (user_id) {
         return this.find({
             condition: { user_id: user_id, is_deleted: false }

@@ -14,23 +14,23 @@
         <div class="container__main__center">
             <div class="container__main__center__search">
                 <div class="container__main__center__search__search-box input">
-                    <input type="text" name="" id="" placeholder="Search">
+                    <input type="text" name="" id="query" placeholder="Search">
                     <svg class="image--icon pos--abs pos--vertical">
                         <use href="#search"></use>
                     </svg>
                 </div>
                 <div class="container__main__center__search__options flex flex--j-space-between">
                     <div class="container__main__center__search__options__filter flex flex--a-center">
-                        <svg class="image--icon">
+                        <!-- <svg class="image--icon">
                             <use href="#filter"></use>
                         </svg>
-                        <p>filter by</p>
+                        <p>filter by</p> -->
                     </div>
-                    <div class="container__main__center__search__options__download flex">
+                    <div id="download-report" class="container__main__center__search__options__download flex">
                         <svg class="image--icon">
                             <use href="#download"></use>
                         </svg>
-                        <p>Generate reports</p>
+                        <p>Generate CSV report</p>
                     </div>
                 </div>
             </div>
@@ -67,6 +67,8 @@
         </div>
     </div>
 </div>
+
+<a download id="download-anchor"></a>
 
 <div class="modal modal--closed" id="technician-modal">
     <form class="modal__main card" id="technician-form" style="width: 80rem;">
@@ -202,5 +204,13 @@
 
     $(() => {
         User.fetch_all('technician');
+
+        $('#download-report').on('click', e => {
+            User.downloadCSV();
+        });
+
+        $('#query').on('keyup', e => {
+            User.searchTechnicians();
+        })
     })
 </script>

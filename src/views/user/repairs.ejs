@@ -21,16 +21,16 @@
                 </div>
                 <div class="container__main__center__search__options flex flex--j-space-between">
                     <div class="container__main__center__search__options__filter flex flex--a-center">
-                        <svg class="image--icon">
+                        <!-- <svg class="image--icon">
                             <use href="#filter"></use>
                         </svg>
-                        <p>filter by</p>
+                        <p>filter by</p> -->
                     </div>
-                    <div class="container__main__center__search__options__download flex">
+                    <div id="download-report" class="container__main__center__search__options__download flex">
                         <svg class="image--icon">
                             <use href="#download"></use>
                         </svg>
-                        <p>Generate reports</p>
+                        <p>Generate CSV Report</p>
                     </div>
                 </div>
             </div>
@@ -113,6 +113,8 @@
 
 <script src="/assets/js/dist/jquery.js"></script>
 
+<a download id="download-anchor"></a>
+
 <script type="module">
     import { openModal, closeModal } from "/assets/js/src/helpers/modal.js"
     import { createSpecialityItem, removeSpecialityItem } from "/assets/js/src/helpers/speciality-selection.js"
@@ -134,5 +136,9 @@
 
     $(() => {
         Ticket.get_by_user();
+
+        $('#download-report').on('click', e => {
+            Ticket.downloadUserCSV();
+        });
     })
 </script>
