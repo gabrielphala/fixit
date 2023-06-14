@@ -14,7 +14,7 @@
         <div class="container__main__center">
             <div class="container__main__center__search">
                 <div class="container__main__center__search__search-box input">
-                    <input type="text" name="" id="" placeholder="Search">
+                    <input type="text" name="" id="query" placeholder="Search by ticket no, issue count, or status">
                     <svg class="image--icon pos--abs pos--vertical">
                         <use href="#search"></use>
                     </svg>
@@ -140,5 +140,9 @@
         $('#download-report').on('click', e => {
             Ticket.downloadUserCSV();
         });
+
+         $('#query').on('keyup', e => {
+            Ticket.search();
+        })
     })
 </script>

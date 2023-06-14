@@ -6,6 +6,7 @@ const { isStudentOrLecturerAuth } = require('../../middleware');
 module.exports = (router) => {
     router.get('/login', base_controller.render('login', 'Log in'));
     router.get('/repairs', isStudentOrLecturerAuth, base_controller.render('user/repairs', 'Repair requests'));
+    router.get('/history', isStudentOrLecturerAuth, base_controller.render('user/history', 'Repair history'));
     router.get('/logout', base_controller.logout);
 
     router.post('/user/add', base_controller.wrap(user_service.add));

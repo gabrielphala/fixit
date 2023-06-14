@@ -49,7 +49,7 @@ export default class Ticket {
             }) 
 
             if (response.successful) {
-                await Ticket.fetch_all()
+                await Ticket.get_by_user()
 
                 closeModal('ticket')
 
@@ -78,6 +78,8 @@ export default class Ticket {
                 ticket_id
             }
         })
+
+        Ticket.get_by_technician();
     }
 
     static async fetch_all () {
@@ -119,6 +121,85 @@ export default class Ticket {
 
     static async get_by_user () {
         const response = await fetch(`/ticket/fetch/user`) 
+
+        if (arrayNotEmpty(response.tickets)) {
+            cachedUserTickets = response.tickets;
+            
+            $('#no-tickets').hide();
+            return $('#ticket-list').html(formatTicketsUser(response.tickets));
+        }
+            
+        $('#no-tickets').show();
+        return $('#ticket-list').html('');
+    }
+
+    static async get_closed_by_user () {
+        const response = await fetch(`/ticket/fetch-closed/user`) 
+
+        if (arrayNotEmpty(response.tickets)) {
+            cachedUserTickets = response.tickets;
+            
+            $('#no-tickets').hide();
+            return $('#ticket-list').html(formatTicketsUser(response.tickets));
+        }
+            
+        $('#no-tickets').show();
+        return $('#ticket-list').html('');
+    }
+
+    static async search () {
+        const response = await fetch(`/ticket/search`, {
+            body: {
+                query: $('#query').val()
+            }
+        }) 
+
+        if (arrayNotEmpty(response.tickets)) {
+            cachedUserTickets = response.tickets;
+            
+            $('#no-tickets').hide();
+            return $('#ticket-list').html(formatTicketsUser(response.tickets));
+        }
+            
+        $('#no-tickets').show();
+        return $('#ticket-list').html('');
+    }
+
+    static async search_by_technician () {
+        const response = await fetch(`/ticket/search-by-technician`, {
+            body: {
+                query: $('#query').val()
+            }
+        }) 
+
+        if (arrayNotEmpty(response.tickets)) {
+            cachedTechnicianTickets = response.tickets;
+
+            $('#no-tickets').hide();
+
+            $('#ticket-list').html(formatTicketsTechnician(response.tickets));
+
+            $('.table__body__row__item--finish').off();
+
+            $('.table__body__row__item--finish').on('click', e => {
+                const ticketid = e.currentTarget.dataset.ticketid;
+
+                Ticket.finishRepair(ticketid);
+            })
+
+            return;
+        }
+            
+        $('#no-tickets').show();
+        return $('#ticket-list').html('');
+    }
+
+    static async search_done () {
+        const response = await fetch(`/ticket/search-closed`, {
+            body: {
+                query: $('#query').val()
+            }
+        }) 
 
         if (arrayNotEmpty(response.tickets)) {
             cachedUserTickets = response.tickets;

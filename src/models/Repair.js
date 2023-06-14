@@ -19,6 +19,16 @@ module.exports = new (class Repair extends SQLifier {
         })
     }
 
+    getTechnicianHistory (technician_id) {
+        return this.find({
+            condition: { technician_id, status: 'Completed' },
+            join: {
+                ref: 'ticket',
+                id: 'ticket_id'
+            }
+        })
+    }
+
     complete (ticket_id, technician_id) {
         return this.update(
             { ticket_id, technician_id },

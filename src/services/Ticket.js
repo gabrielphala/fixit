@@ -78,6 +78,39 @@ module.exports = class TicketService {
         } catch (e) { throw e; }
     }
 
+    static async get_closed_by_user (wrap_res, _, { user_info }) {
+        try {
+            wrap_res.tickets = await Ticket.get_closed_by_user(user_info.id);
+
+            return wrap_res;
+        } catch (e) { throw e; }
+    }
+
+    static async search_tickets (wrap_res, body, { user_info }) {
+        try {
+            wrap_res.tickets = await Ticket.search_tickets(body.query, user_info.id);
+
+            return wrap_res;
+        } catch (e) { throw e; }
+    }
+
+    static async search_tickets_technician (wrap_res, body, { user_info }) {
+        try {
+            wrap_res.tickets = await Ticket.search_tickets_technician(body.query, user_info.id);
+
+            return wrap_res;
+        } catch (e) { throw e; }
+    }
+
+    static async search_done (wrap_res, body, { user_info }) {
+        try {
+            wrap_res.tickets = await Ticket.search_done(body.query, user_info.id);
+
+            return wrap_res;
+        } catch (e) { throw e; }
+    }
+
+
     static async get_by_technician (wrap_res, _, { user_info }) {
         try {
             wrap_res.tickets = await Ticket.get_by_technician(user_info.id);

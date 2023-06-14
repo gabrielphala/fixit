@@ -1,5 +1,5 @@
 <div class="container">
-    <%- include('../partials/sidenav/technician') %>
+    <%- include('../partials/sidenav/user') %>
     <div class="container__main container__main--sidenav-closed">
         <%- include('../partials/header/user') %>
 
@@ -7,18 +7,18 @@
             <img src="/assets/illustrations/note.svg" alt="Note">
             <div class="container__main__title__sep"></div>
             <div class="container__main__title__details">
-                <h1>New repair tickets</h1>
-                <p>Monitor all your ongoing repair requets from here</p>
+                <h1>Repair history</h1>
+                <p>Monitor all your repair history from here</p>
             </div>
         </div>
         <div class="container__main__center">
             <div class="container__main__center__search">
-                <!-- <div class="container__main__center__search__search-box input">
-                    <input type="text" name="" id="query" placeholder="Search">
+                <div class="container__main__center__search__search-box input">
+                    <input type="text" name="" id="query" placeholder="Search by ticket no or issue count">
                     <svg class="image--icon pos--abs pos--vertical">
                         <use href="#search"></use>
                     </svg>
-                </div> -->
+                </div>
                 <div class="container__main__center__search__options flex flex--j-space-between">
                     <div class="container__main__center__search__options__filter flex flex--a-center">
                         <!-- <svg class="image--icon">
@@ -30,7 +30,7 @@
                         <svg class="image--icon">
                             <use href="#download"></use>
                         </svg>
-                        <p>Generate CSV report</p>
+                        <p>Generate CSV Report</p>
                     </div>
                 </div>
             </div>
@@ -40,44 +40,45 @@
                     <ul class="table__header__row flex">
                         <li class="table__header__row__item">#</li>
                         <li class="table__header__row__item">Ticket no</li>
+                        <li class="table__header__row__item">Issue count</li>
                         <li class="table__header__row__item">Status</li>
-                        <li class="table__header__row__item">Requested by</li>
                         <li class="table__header__row__item">Request date</li>
-                        <li class="table__header__row__item">Action</li>
                     </ul>
                 </div>
                 <div class="table__body" id="ticket-list">
                     <ul class="table__body__row"></ul>
                 </div>
-                <div class="card__body empty flex flex--a-center" id="no-tickets">
+                <div class="card__body empty flex flex--a-center" id="no-tickets" style="display: none;">
                     <img src="/assets/illustrations/no-data.svg" alt="No data">
                     <div class="empty_caption">
                         <h1>Tickets not found</h1>
                         <p>There aren't any tickets at the moment.</p>
-                        <p>Tickets will appear here when repairs are required.</p>
+                        <p>Tickets of your repair requets will appear here</p>
                     </div>
                 </div>
             </div>
+
+            <button class="btn btn--primary open-ticket-modal">Log repair</button>
         </div>
     </div>
 </div>
 
-<a download id="download-anchor"></a>
-
 <script src="/assets/js/dist/jquery.js"></script>
+
+<a download id="download-anchor"></a>
 
 <script type="module">
     import Ticket from "/assets/js/src/auth/Ticket.js"
 
     $(() => {
-        Ticket.get_by_technician();
+        Ticket.get_closed_by_user();
 
         $('#download-report').on('click', e => {
-            Ticket.downloadTechnicialCSV();
+            Ticket.downloadUserCSV();
         });
 
         $('#query').on('keyup', e => {
-            Ticket.search_by_technician();
-        });
+            Ticket.search_done();
+        })
     })
 </script>

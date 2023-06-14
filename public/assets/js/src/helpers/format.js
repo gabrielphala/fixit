@@ -69,6 +69,26 @@ export const formatTicketsTechnician = (tickets) => {
     return formated;
 }
 
+export const formatRepairHistory = (repairs) => {
+    let formated = '', count = 1;
+
+    repairs.forEach(repair => {
+        formated += `
+            <ul class="table__body__row table__body__row--repair" data-repairid="${repair.id}">
+                <li class="table__body__row__item">${count}</li>
+                <li class="table__body__row__item">${repair.item}</li>
+                <li class="table__body__row__item">${repair.ticket_no}</li>
+                <li class="table__body__row__item">${repair.status}</li>
+                <li class="table__body__row__item">${getStaticDate(repair.added_on)}</li>
+            </ul>
+        `;
+
+        count++
+    });
+
+    return formated;
+}
+
 export const formatUnavailableSpecialities = (specialities) => {
     let formated = 'Could not find technicials for specialities: ';
 
