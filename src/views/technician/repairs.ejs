@@ -11,7 +11,7 @@
                 <p>Monitor all your ongoing repair requets from here</p>
             </div>
         </div>
-        <div class="container__main__center">
+        <div class="container__main__center" style="padding: 0 20%;">
             <div class="container__main__center__search">
                 <!-- <div class="container__main__center__search__search-box input">
                     <input type="text" name="" id="query" placeholder="Search">
@@ -38,7 +38,7 @@
             <div class="card table" style="margin: 3rem 0;">
                 <div class="table__header">
                     <ul class="table__header__row flex">
-                        <li class="table__header__row__item">#</li>
+                        <li class="table__header__row__item" style="flex: 0 0 3rem;">#</li>
                         <li class="table__header__row__item">Ticket no</li>
                         <li class="table__header__row__item">Status</li>
                         <li class="table__header__row__item">Requested by</li>
@@ -64,13 +64,69 @@
 
 <a download id="download-anchor"></a>
 
+<div class="modal modal--closed" id="description-modal">
+    <form class="modal__main card" id="description-form" style="width: 80rem;">
+        <div class="card__header card__header--no-border flex flex--a-center flex--j-space-between">
+            <div class="card__header__left">
+                <h1>Repair description</h1>
+                <p>Description of the next repair on the ticket</p>
+            </div>
+            <svg class="image--icon close-description-modal">
+                <use href="#cross"></use>
+            </svg>
+        </div>
+        <div class="card__body">
+            <p id="repair-description"></p>
+        </div>
+        <div class="card__footer">
+            <button class="btn close-description-modal" type="button">Cancel</button>
+        </div>
+    </form>
+</div>
+
+<div class="modal modal--closed" id="escalate-modal">
+    <form class="modal__main card" id="escalate-form" style="width: 80rem;">
+        <div class="card__header card__header--no-border flex flex--a-center flex--j-space-between">
+            <div class="card__header__left">
+                <h1>Repair escalation</h1>
+                <p>Escalate the next repair on the ticket</p>
+            </div>
+            <svg class="image--icon close-escalation-modal">
+                <use href="#cross"></use>
+            </svg>
+        </div>
+        <div class="card__body">
+            <p>Choose next technician</p>
+
+            <input type="text" id="ticket-id" hidden>
+
+            <div class="input">
+                <select id="technicians">
+                    <option value="select">Select</option>
+                </select>
+            </div>
+        </div>
+        <div class="card__footer">
+            <button class="btn btn--primary">Escalate</button>
+            <button class="btn close-escalation-modal" type="button">Cancel</button>
+        </div>
+    </form>
+</div>
+
 <script src="/assets/js/dist/jquery.js"></script>
 
 <script type="module">
     import Ticket from "/assets/js/src/auth/Ticket.js"
+    import { openModal, closeModal } from "/assets/js/src/helpers/modal.js"
 
     $(() => {
         Ticket.get_by_technician();
+
+        $('#escalate-form').on('submit', e => {
+            e.preventDefault();
+
+            Ticket.escalateRepair();
+        });
 
         $('#download-report').on('click', e => {
             Ticket.downloadTechnicialCSV();
@@ -79,5 +135,9 @@
         $('#query').on('keyup', e => {
             Ticket.search_by_technician();
         });
+
+        $('.close-description-modal').on('click', e => {
+            closeModal('description')
+        })
     })
 </script>

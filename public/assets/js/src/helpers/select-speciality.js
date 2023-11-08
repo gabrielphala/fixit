@@ -2,24 +2,22 @@ export const createSpecialityItem = () => {
     const specialityCount = parseInt($('#speciality-count').val()) + 1;
 
     const itemTemplate = `
-        <div class="input" id="speciality-item-${specialityCount}" style="margin-top: 1.4rem;">
-            <div class="flex flex--a-center">
-                <div>
-                    <label for="speciality-${specialityCount}" id="speciality-${specialityCount}-label">Speciality: ${specialityCount}</label>
-                    <select id="speciality-${specialityCount}" class="speciality__item" style="flex: 1;">
-                        <option value="select">Select</option>
-                        <option value="ram">Ram</option>
-                        <option value="rom">Rom</option>
-                        <option value="screen">Screen</option>
-                        <option value="charging port">Charging port</option>
-                    </select>
-                    <textarea class="margin--top-1" id="description-${specialityCount}" placeholder="Description"></textarea>
-                </div>
-                <svg class="image--icon" style="margin-left: 1rem; fill: #b68c8c;" id="delete-item-${specialityCount}">
-                    <use href="#cancel"></use>
-                </svg>
-            </div>
-        </div>
+
+		<div class="input" id="speciality-item-${specialityCount}" style="margin-top: 1.4rem;">
+			<label for="speciality-${specialityCount}" id="speciality-${specialityCount}-label">Speciality: ${specialityCount}</label>
+			<div class="flex flex--a-center">
+				<select id="speciality-${specialityCount}" class="speciality__item" style="flex: 1;">
+					<option value="select">Select</option>
+					<option value="ram">Ram</option>
+					<option value="rom">Rom</option>
+					<option value="screen">Screen</option>
+					<option value="charging port">Charging port</option>
+				</select>
+				<svg class="image--icon" style="margin-left: 1rem; fill: #b68c8c;" id="delete-item-${specialityCount}">
+					<use href="#cancel"></use>
+				</svg>
+			</div>
+		</div>
     `;
 
     const parent = $(`#speciality-selection-container`);
@@ -54,9 +52,6 @@ const rename = (itemId, specialityCount) => {
 
         const select = $(`#speciality-${oldId}`)[0];
         select.id = `speciality-${currentId}`;
-
-        const description = $(`#description-${oldId}`)[0];
-        description.id = `description-${currentId}`;
 
         const deleteBtn = $(`#delete-item-${oldId}`);
         deleteBtn[0].id = `delete-item-${currentId}`;

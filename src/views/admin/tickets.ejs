@@ -1,0 +1,76 @@
+<div class="container">
+  <%- include('../partials/sidenav/admin') %>
+    <div class="container__main container__main--sidenav-closed">
+      <%- include('../partials/header/admin') %>
+
+        <div class="container__main__title flex flex--a-center">
+          <img src="/assets/illustrations/person.svg" alt="Note">
+          <div class="container__main__title__sep"></div>
+          <div class="container__main__title__details">
+            <h1>Tickets</h1>
+            <p>Manage all your tickets from here</p>
+          </div>
+        </div>
+        <div class="container__main__center" style="padding: 0 15%;">
+          <div class="container__main__center__search">
+            <div class="container__main__center__search__search-box input">
+              <input type="text" name="" id="query" placeholder="Search">
+              <svg class="image--icon pos--abs pos--vertical">
+                <use href="#search"></use>
+              </svg>
+            </div>
+            <div class="container__main__center__search__options flex flex--j-space-between">
+              <div class="container__main__center__search__options__filter flex flex--a-center">
+                <!-- <svg class="image--icon">
+                            <use href="#filter"></use>
+                        </svg>
+                        <p>filter by</p> -->
+              </div>
+              <div id="download-report" class="container__main__center__search__options__download flex">
+                <svg class="image--icon">
+                  <use href="#download"></use>
+                </svg>
+                <p>Generate CSV report</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="card table" style="margin: 3rem 0; overflow: unset;">
+            <div class="table__header">
+              <ul class="table__header__row flex">
+                <li class="table__header__row__item">#</li>
+                <li class="table__header__row__item">Customer</li>
+                <li class="table__header__row__item">Technical</li>
+                <li class="table__header__row__item">Unique no</li>
+                <li class="table__header__row__item">Items</li>
+				<li class="table__header__row__item">Status</li>
+				<li class="table__header__row__item">Created on</li>
+              </ul>
+            </div>
+            <div class="table__body" id="ticket-list">
+              <ul class="table__body__row"></ul>
+            </div>
+            <div class="card__body empty flex flex--a-center" id="no-tickets" style="display: none;">
+              <img src="/assets/illustrations/no-data.svg" alt="No data">
+              <div class="empty_caption">
+                <h1>Tickets not found</h1>
+                <p>There aren't any tickets at the moment.</p>
+                <p>Tickets will appear here when available.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+    </div>
+</div>
+
+<a download id="download-anchor"></a>
+
+<script src="/assets/js/dist/jquery.js"></script>
+
+<script type="module">
+	import Ticket from "/assets/js/src/auth/Ticket.js"
+
+	$(() => {
+		Ticket.fetch_all_for_admin();
+	})
+</script>

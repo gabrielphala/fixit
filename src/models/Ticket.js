@@ -17,9 +17,19 @@ module.exports = new (class Ticket extends SQLifier {
     }
 
     fetch_all () {
-        return this.find({
-            condition: { is_deleted: false }
-        })
+        return this.raw(`
+            SELECT 
+                ticket_no, status, item_count, ticket.added_on,
+                cust.lastname as cust_lastname,
+                cust.initials as cust_initials,
+                technician.lastname as technician_lastname,
+                technician.initials as technician_initials
+            FROM ticket
+            INNER JOIN user cust 
+            ON ticket.user_id = cust.id
+            INNER JOIN user technician 
+            ON ticket.cur_technician_id = technician.id
+        `)
     }
 
     getById (id) {

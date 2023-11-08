@@ -85,15 +85,18 @@
                 <div id="speciality-selection-container" style="height: 18rem; overflow-y: auto;">
                     <input type="text" id="speciality-count" value="1" hidden>
                     <div class="input" id="speciality-item-1" style="margin-top: 1.4rem;">
-                        <label for="speciality-1" id="speciality-1-label">Speciality: 1</label>
                         <div class="flex flex--a-center">
-                            <select id="speciality-1" class="speciality__item" style="flex: 1;">
-                                <option value="select">Select</option>
-                                <option value="ram">Ram</option>
-                                <option value="rom">Rom</option>
-                                <option value="screen">Screen</option>
-                                <option value="charging port">Charging port</option>
-                            </select>
+                            <div>
+                                <label for="speciality-1" id="speciality-1-label">Speciality: 1</label>
+                                <select id="speciality-1" class="speciality__item" style="flex: 1;">
+                                    <option value="select">Select</option>
+                                    <option value="ram">Ram</option>
+                                    <option value="rom">Rom</option>
+                                    <option value="screen">Screen</option>
+                                    <option value="charging port">Charging port</option>
+                                </select>
+                                <textarea class="margin--top-1 description__item" id="description-1" placeholder="Description"></textarea>
+                            </div>
                             <svg class="image--icon" style="margin-left: 1rem; fill: #b68c8c;" id="delete-item-1">
                                 <use href="#cancel"></use>
                             </svg>

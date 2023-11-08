@@ -11,6 +11,12 @@ module.exports = new (class Speciality extends SQLifier {
         })
     }
 
+    getAllBySpeciality (speciality) {
+        return this.find({
+            condition: { speciality }
+        })
+    }
+
     getLatestBySpeciality (speciality) {
         return this.findLatestOne({
             condition: {

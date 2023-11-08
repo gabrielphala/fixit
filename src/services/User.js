@@ -17,6 +17,10 @@ module.exports = class StudentService {
                 'ID': { value: body.unique_no, min: 9, max: 10 }
             });
 
+            if (!(/^[a-zA-Z]+$/.test(body.lastname))) throw 'Last name should be only alphabets'
+            if (!(/^[a-zA-Z]+$/.test(body.initials))) throw 'Initials should be only alphabets'
+            if (/^[0-9]+$/.test(body.unique_no)) throw 'ID should be a number';
+
             if ((await User.exists({ unique_no: body.unique_no })).found)
                 throw `A ${body.user_type} with the ID: ${body.unique_no} already exists`;
 
@@ -59,6 +63,10 @@ module.exports = class StudentService {
                 'ID': { value: body.unique_no, min: 9, max: 10 }
             });
 
+            if (!(/^[a-zA-Z]+$/.test(body.lastname))) throw 'Last name should be only alphabets'
+            if (!(/^[a-zA-Z]+$/.test(body.initials))) throw 'Initials should be only alphabets'
+            if (/^[0-9]+$/.test(body.unique_no)) throw 'ID should be a number';
+
             if ((await User.exists({ unique_no: body.unique_no, id: { $ne: body.id } })).found)
                 throw `A ${body.user_type} with the ID: ${body.unique_no} already exists`;
 
@@ -80,6 +88,8 @@ module.exports = class StudentService {
                 'ID': { value: body.unique_no, min: 9, max: 10 },
                 'Password': { value: body.password, min: 8, max: 16 }
             });
+
+            if (/^[0-9]+$/.test(body.unique_no)) throw 'ID should be a number';
 
             const userDetails = await User.get_user_by_unique_no(body.unique_no);
 
@@ -112,6 +122,8 @@ module.exports = class StudentService {
 
     static async searchStudents (wrap_res, body) {
         try {
+            if (!(/^[a-zA-Z0-9]+$/.test(body.query))) throw 'Search term should be alphabets or numbers'
+
             wrap_res.users = await User.searchStudents(body.query);
 
             return wrap_res;
@@ -120,6 +132,8 @@ module.exports = class StudentService {
 
     static async searchTechnicians (wrap_res, body) {
         try {
+            if (!(/^[a-zA-Z0-9]+$/.test(body.query))) throw 'Search term should be alphabets or numbers'
+
             wrap_res.users = await User.searchTechnicians(body.query);
 
             return wrap_res;
@@ -128,6 +142,8 @@ module.exports = class StudentService {
 
     static async searchLecturers (wrap_res, body) {
         try {
+            if (!(/^[a-zA-Z0-9]+$/.test(body.query))) throw 'Search term should be alphabets or numbers'
+
             wrap_res.users = await User.searchLecturers(body.query);
 
             return wrap_res;

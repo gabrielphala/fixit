@@ -6,7 +6,7 @@ const User = require('../models/User');
 const String = require('../helpers/String');
 
 module.exports = class TicketService {
-    static async add (wrap_res, { items }, { user_info }) {
+    static async add (wrap_res, { items, descriptions }, { user_info }) {
         try {
             const unavailable_specialities = [];
 
@@ -14,12 +14,20 @@ module.exports = class TicketService {
 
             for (let i = 0; i < items.length; i++) {
                 const item = items[i];
+                const description = descriptions[i];
+
+            if (!(/^[a-zA-Z]+$/.test(item))) throw 'Item should be alphabets'
+            if (!(/^[a-zA-Z0-9]+$/.test(description))) throw 'Description should be alphabets or numbers'
+
 
                 if (item == 'select') throw 'You left a speciality field on \'select\'';
 
-                const info = await Speciality.getLatestBySpeciality(item);
+                // get all tecshnicians by this speciiality
+                // find who has the least tickets
 
-                if (!info) {
+                const technicians = await Speciality.getAllBySpeciality(item);
+
+                if (!technicians) {
                     unavailable_specialities.push(item);
                     
                     continue;
@@ -34,18 +42,61 @@ module.exports = class TicketService {
                     })
                 }
 
+                let lowestRepairCountTechId;
+                let lowestRepairCount;
+
+                for (let i = 0; i < technicians.length; i++) {
+                    const technician = technicians[i];
+
+                    let count = await (Repair.countIncompleteRepairs(technician.technician_id));
+                    
+                    if (lowestRepairCount == null || lowestRepairCount >= count) {
+                        lowestRepairCount = count;
+                        lowestRepairCountTechId = technician.technician_id;
+                    }
+                }
+
                 const repair_info = await Repair.insert({
                     item,
+                    description,
                     status: 'Pending',
                     ticket_id: new_ticket.id,
-                    technician_id: info.technician_id
+                    technician_id: lowestRepairCountTechId
                 })
 
+                //---
+
+                // const info = await Speciality.getLatestBySpeciality(item);
+
+                // if (!info) {
+                //     unavailable_specialities.push(item);
+                    
+                //     continue;
+                // }
+
+                // if (!new_ticket) {
+                //     new_ticket = await Ticket.insert({
+                //         user_id: user_info.id,
+                //         ticket_no: String.uniqueId(8),
+                //         item_count: items.length,
+                //         status: 'New'
+                //     })
+                // }
+
+                // const repair_info = await Repair.insert({
+                //     item,
+                //     status: 'Pending',
+                //     ticket_id: new_ticket.id,
+                //     technician_id: info.technician_id
+                // })
+
+                const currentTech = await User.findOne({ condition: { id: lowestRepairCountTechId } })
+
                 if (!(attended++)) {
-                    new_ticket.status = `${item} by ${info.lastname} ${info.initials}`
+                    new_ticket.status = `${item} by ${currentTech.lastname} ${currentTech.initials}`
                     repair_info.status = 'In Progress'
 
-                    new_ticket.cur_technician_id = info.technician_id;
+                    new_ticket.cur_technician_id = lowestRepairCountTechId;
 
                     repair_info.save()
                 }
@@ -88,6 +139,8 @@ module.exports = class TicketService {
 
     static async search_tickets (wrap_res, body, { user_info }) {
         try {
+            if (!(/^[a-zA-Z0-9]+$/.test(body.query))) throw 'Search term should be alphabets or numbers'
+
             wrap_res.tickets = await Ticket.search_tickets(body.query, user_info.id);
 
             return wrap_res;
@@ -104,6 +157,8 @@ module.exports = class TicketService {
 
     static async search_done (wrap_res, body, { user_info }) {
         try {
+            if (!(/^[a-zA-Z0-9]+$/.test(body.query))) throw 'Search term should be alphabets or numbers'
+
             wrap_res.tickets = await Ticket.search_done(body.query, user_info.id);
 
             return wrap_res;
@@ -143,6 +198,78 @@ module.exports = class TicketService {
             }
 
             ticket.save();
+
+            wrap_res.successful = true;
+
+            return wrap_res;
+        } catch (e) { throw e; }
+    }
+
+    static async escalateRepair (wrap_res, body) {
+        try {
+            const { tech_id, ticket_id } = body;
+
+            const ticket = await Ticket.getById(ticket_id);
+
+            const repair = await Repair.findOne({
+                condition: {
+                    ticket_id,
+                    status: 'In Progress'
+                }
+            });
+
+            const technician = await User.getById(tech_id);
+
+            ticket.cur_technician_id = tech_id;
+            ticket.status = `${repair.status} by ${technician.lastname}`;
+
+            repair.technician_id = tech_id
+
+            repair.save();
+            ticket.save();
+
+            wrap_res.successful = true;
+
+            return wrap_res;
+        } catch (e) { throw e; }
+    }
+
+    static async getDescriptionOfNextRepair (wrap_res, body) {
+        try {
+            const repair = await Repair.findOne({
+                condition: {
+                    id: body.ticket_id
+                }
+            });
+
+            wrap_res.description = repair.description;
+
+            wrap_res.successful = true;
+
+            return wrap_res;
+        } catch (e) { throw e; }
+    }
+
+    static async getTechniciansByRepairKind (wrap_res, body) {
+        try {
+            const { ticket_id } = body;
+            
+            const repair = await Repair.findOne({
+                condition: {
+                    ticket_id,
+                    status: 'In Progress'
+                }
+            });
+
+            wrap_res.users = await Speciality.find({
+                condition: {
+                    speciality: repair.item
+                },
+                join: {
+                    ref: 'user',
+                    id: 'technician_id'
+                }
+            })
 
             wrap_res.successful = true;
 

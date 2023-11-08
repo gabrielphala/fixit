@@ -13,6 +13,8 @@ module.exports = class AdminService {
                 'Password': { value: body.password, min: 8, max: 16 }
             });
 
+            if (!(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(body.email))) throw 'Email address is invalid'
+
             const adminDetails = await Admin.findOne({
                 condition: {
                     email: body.email

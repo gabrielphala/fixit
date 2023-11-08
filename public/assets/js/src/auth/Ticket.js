@@ -1,14 +1,15 @@
 import fetch from "../helpers/fetch.js"
 import popup from "../helpers/popup.js"
 
-import { closeModal } from "../helpers/modal.js"
+import { closeModal, openModal } from "../helpers/modal.js"
 import { arrayNotEmpty } from "../helpers/array.js"
 import { showError, clearError } from "../helpers/error.js"
 
 import {
     formatTicketsUser,
     formatUnavailableSpecialities,
-    formatTicketsTechnician
+    formatTicketsTechnician,
+    formatTicketsAdmin
 } from "../helpers/format.js"
 
 let cachedUserTickets = [];
@@ -33,6 +34,7 @@ const tAllowedColumns = [
 export default class Ticket {
     static async add () {
         const items = [];
+        const descriptions = [];
         
         try {
             Array.from($('.speciality__item')).forEach(field => {
@@ -42,9 +44,17 @@ export default class Ticket {
                 items.push(field.value)
             });
 
+            Array.from($('.description__item')).forEach(field => {
+                if (field.value.trim() == '')
+                    throw 'Please describe issue';
+
+                descriptions.push(field.value)
+            });
+
             const response = await fetch('/ticket/add', {
                 body: {
-                    items
+                    items,
+                    descriptions
                 }
             }) 
 
@@ -82,12 +92,62 @@ export default class Ticket {
         Ticket.get_by_technician();
     }
 
+    static async getDescriptionOfNextRepair (ticket_id) {
+        const response = await fetch('/ticket/get/repair-description', {
+            body: {
+                ticket_id
+            }
+        })
+
+        $('#repair-description').text(response.description);
+
+        openModal('description')
+    }
+
+    static async escalateRepair () {
+        const response = await fetch(`/ticket/escalate-repair`, {
+            body: {
+                tech_id: $('#technicians').val(),
+                ticket_id: $('#ticket-id').val()
+            }
+        })
+    }
+
+    static async escalateNextRepair (ticket_id) {
+        const response = await fetch(`/user/fetch/all/speciality`, {
+            body: {ticket_id}
+        }) 
+
+        let formated = '<option value="select">Select</option>'        
+
+        response.users.forEach(user => {
+            formated += `<option value="${user.technician_id}">${user.lastname} ${user.initials}</option>`
+        });
+
+        $('#technicians').html(formated)
+        $('#ticket-id').val(ticket_id);
+
+        openModal('escalate')
+    }
+
     static async fetch_all () {
         const response = await fetch(`/ticket/fetch/all`) 
 
         if (arrayNotEmpty(response.tickets)) {
             $('#no-tickets').hide();
             return $('#ticket-list').html(formatTicketsUser(response.tickets));
+        }
+            
+        $('#no-tickets').show();
+        return $('#ticket-list').html('');
+    }
+
+    static async fetch_all_for_admin () {
+        const response = await fetch(`/ticket/fetch/all`) 
+
+        if (arrayNotEmpty(response.tickets)) {
+            $('#no-tickets').hide();
+            return $('#ticket-list').html(formatTicketsAdmin(response.tickets));
         }
             
         $('#no-tickets').show();
@@ -110,6 +170,18 @@ export default class Ticket {
                 const ticketid = e.currentTarget.dataset.ticketid;
                 
                 Ticket.finishRepair(ticketid);
+            })
+
+            $('.table__body__row__item--description').on('click', e => {
+                const ticketid = e.currentTarget.dataset.ticketid;
+                
+                Ticket.getDescriptionOfNextRepair(ticketid);
+            })
+
+            $('.table__body__row__item--escalate').on('click', e => {
+                const ticketid = e.currentTarget.dataset.ticketid;
+
+                Ticket.escalateNextRepair(ticketid);
             })
 
             return;
