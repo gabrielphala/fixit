@@ -19,7 +19,10 @@ module.exports = class StudentService {
 
             if (!(/^[a-zA-Z]+$/.test(body.lastname))) throw 'Last name should be only alphabets'
             if (!(/^[a-zA-Z]+$/.test(body.initials))) throw 'Initials should be only alphabets'
-            if (/^[0-9]+$/.test(body.unique_no)) throw 'ID should be a number';
+            
+            body.unique_no = body.unique_no.trim();
+
+            if (!(/^[0-9]+$/.test(body.unique_no)) || !(parseInt(body.unique_no) > 0)) throw 'ID should be a valid number';
 
             if ((await User.exists({ unique_no: body.unique_no })).found)
                 throw `A ${body.user_type} with the ID: ${body.unique_no} already exists`;
@@ -65,7 +68,10 @@ module.exports = class StudentService {
 
             if (!(/^[a-zA-Z]+$/.test(body.lastname))) throw 'Last name should be only alphabets'
             if (!(/^[a-zA-Z]+$/.test(body.initials))) throw 'Initials should be only alphabets'
-            if (/^[0-9]+$/.test(body.unique_no)) throw 'ID should be a number';
+            
+            body.unique_no = body.unique_no.trim();
+
+            if (!(/^[0-9]+$/.test(body.unique_no)) || !(parseInt(body.unique_no) > 0)) throw 'ID should be a valid number';
 
             if ((await User.exists({ unique_no: body.unique_no, id: { $ne: body.id } })).found)
                 throw `A ${body.user_type} with the ID: ${body.unique_no} already exists`;
@@ -89,7 +95,9 @@ module.exports = class StudentService {
                 'Password': { value: body.password, min: 8, max: 16 }
             });
 
-            if (/^[0-9]+$/.test(body.unique_no)) throw 'ID should be a number';
+            body.unique_no = body.unique_no.trim();
+
+            if (!(/^[0-9]+$/.test(body.unique_no)) || !(parseInt(body.unique_no) > 0)) throw 'ID should be a valid number';
 
             const userDetails = await User.get_user_by_unique_no(body.unique_no);
 
