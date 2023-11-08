@@ -111,6 +111,8 @@ export default class Ticket {
                 ticket_id: $('#ticket-id').val()
             }
         })
+
+        location.href  = location.href;
     }
 
     static async escalateNextRepair (ticket_id) {

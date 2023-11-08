@@ -17,8 +17,7 @@ module.exports = class TicketService {
                 const description = descriptions[i];
 
                 if (!(/^[a-zA-Z]+$/.test(item))) throw 'Item should be alphabets'
-                if (!(/^[a-zA-Z0-9\s]+$/.test(description))) throw 'Description should be alphabets or numbers'
-
+                if (!(/^[a-zA-Z0-9\s ]+$/.test(description))) throw 'Description should be alphabets or numbers'
 
                 if (item == 'select') throw 'You left a speciality field on \'select\'';
 
