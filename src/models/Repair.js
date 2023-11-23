@@ -22,7 +22,7 @@ module.exports = new (class Repair extends SQLifier {
 
     getTechnicianHistory (technician_id) {
         return this.find({
-            condition: { technician_id, status: 'Completed' },
+            condition: { technician_id, status: 'Closed' },
             join: {
                 ref: 'ticket',
                 id: 'ticket_id'
@@ -33,14 +33,14 @@ module.exports = new (class Repair extends SQLifier {
     complete (ticket_id, technician_id) {
         return this.update(
             { ticket_id, technician_id },
-            { status: 'Completed' }
+            { status: 'Closed' }
         )
     }
 
     countIncompleteRepairs (tech_id) {
         return this.count({
             technician_id: tech_id,
-            status: { $ne : 'Completed'}
+            status: { $ne : 'Closed'}
         })
     }
 })

@@ -89,6 +89,8 @@ export default class Ticket {
             }
         })
 
+        location.href = location.href;
+
         Ticket.get_by_technician();
     }
 

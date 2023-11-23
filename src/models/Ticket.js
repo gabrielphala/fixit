@@ -41,7 +41,7 @@ module.exports = new (class Ticket extends SQLifier {
 
     get_by_user (user_id) {
         return this.find({
-            condition: { user_id: user_id, is_deleted: false, status: { $ne: 'Done' } }
+            condition: { user_id: user_id, is_deleted: false, status: { $ne: 'Closed' } }
         })
     }
 
@@ -68,21 +68,21 @@ module.exports = new (class Ticket extends SQLifier {
     search_done (query, user_id) {
         return this.search({
             condition: [
-                {  user_id: user_id, item_count: query, is_deleted: false, status: 'Done' },
-                {  user_id: user_id, ref_no: query, is_deleted: false, status: 'Done' }
+                {  user_id: user_id, item_count: query, is_deleted: false, status: 'Closed' },
+                {  user_id: user_id, ref_no: query, is_deleted: false, status: 'Closed' }
             ]
         })
     }
 
     get_closed_by_user (user_id) {
         return this.find({
-            condition: { user_id: user_id, is_deleted: false, status: 'Done' }
+            condition: { user_id: user_id, is_deleted: false, status: 'Closed' }
         })
     }
 
     get_by_technician (technician_id) {
         return this.find({
-            condition: { cur_technician_id: technician_id, is_deleted: false, status: { $ne: 'Done' } },
+            condition: { cur_technician_id: technician_id, is_deleted: false, status: { $ne: 'Closed' } },
             join: {
                 ref: 'user',
                 id: 'user_id'

@@ -176,7 +176,7 @@ module.exports = class TicketService {
                     }
                 });
 
-                rep.status = 'closed';
+                rep.status = 'Closed';
 
                 rep.save()
 
