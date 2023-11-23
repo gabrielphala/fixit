@@ -207,7 +207,7 @@ module.exports = class TicketService {
             const technician = await User.getById(tech_id);
 
             ticket.cur_technician_id = tech_id;
-            ticket.status = `${repair.status} by ${technician.lastname}`;
+            ticket.technician = `${technician.lastname} ${technician.initials}`;
 
             repair.technician_id = tech_id
 
