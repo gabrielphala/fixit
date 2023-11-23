@@ -8,9 +8,10 @@ module.exports = new (class Ticket extends SQLifier {
             id: { type: 'int', isAutoIncrement: true, isPrimary: true },
             user_id: { type: 'int', ref: 'user' },
             cur_technician_id: { type: 'int', ref: 'user' },
-            ticket_no: { type: 'varchar', length: 5 },
+            ref_no: { type: 'varchar', length: 5 },
             item_count: { type: 'int', length: 2 },
             status: { type: 'varchar', length: 30 },
+            technician: { type: 'varchar', length: 30 },
             added_on: { type: 'datetime', default: SQLDate.now },
             is_deleted: { type: 'boolean', default: false }
         })
@@ -19,7 +20,7 @@ module.exports = new (class Ticket extends SQLifier {
     fetch_all () {
         return this.raw(`
             SELECT 
-                ticket_no, status, item_count, ticket.added_on,
+                ref_no, status, item_count, ticket.added_on,
                 cust.lastname as cust_lastname,
                 cust.initials as cust_initials,
                 technician.lastname as technician_lastname,
@@ -48,7 +49,7 @@ module.exports = new (class Ticket extends SQLifier {
         return this.search({
             condition: [
                 {  user_id: user_id, item_count: query, is_deleted: false  },
-                {  user_id: user_id, ticket_no: query, is_deleted: false  },
+                {  user_id: user_id, ref_no: query, is_deleted: false  },
                 {  user_id: user_id, status: query, is_deleted: false  }
             ]
         })
@@ -68,7 +69,7 @@ module.exports = new (class Ticket extends SQLifier {
         return this.search({
             condition: [
                 {  user_id: user_id, item_count: query, is_deleted: false, status: 'Done' },
-                {  user_id: user_id, ticket_no: query, is_deleted: false, status: 'Done' }
+                {  user_id: user_id, ref_no: query, is_deleted: false, status: 'Done' }
             ]
         })
     }

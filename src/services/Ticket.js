@@ -35,7 +35,7 @@ module.exports = class TicketService {
                 if (!new_ticket) {
                     new_ticket = await Ticket.insert({
                         user_id: user_info.id,
-                        ticket_no: String.uniqueId(8),
+                        ref_no: String.uniqueId(8),
                         item_count: items.length,
                         status: 'New'
                     })
@@ -63,37 +63,13 @@ module.exports = class TicketService {
                     technician_id: lowestRepairCountTechId
                 })
 
-                //---
-
-                // const info = await Speciality.getLatestBySpeciality(item);
-
-                // if (!info) {
-                //     unavailable_specialities.push(item);
-                    
-                //     continue;
-                // }
-
-                // if (!new_ticket) {
-                //     new_ticket = await Ticket.insert({
-                //         user_id: user_info.id,
-                //         ticket_no: String.uniqueId(8),
-                //         item_count: items.length,
-                //         status: 'New'
-                //     })
-                // }
-
-                // const repair_info = await Repair.insert({
-                //     item,
-                //     status: 'Pending',
-                //     ticket_id: new_ticket.id,
-                //     technician_id: info.technician_id
-                // })
-
                 const currentTech = await User.findOne({ condition: { id: lowestRepairCountTechId } })
 
                 if (!(attended++)) {
-                    new_ticket.status = `${item} by ${currentTech.lastname} ${currentTech.initials}`
                     repair_info.status = 'In Progress'
+
+                    new_ticket.status = `In Progress`;
+                    new_ticket.technician = `${currentTech.lastname} ${currentTech.initials}`
 
                     new_ticket.cur_technician_id = lowestRepairCountTechId;
 
@@ -187,13 +163,24 @@ module.exports = class TicketService {
                 const technician = await User.getById(repair.technician_id);
 
                 ticket.cur_technician_id = repair.technician_id;
-                ticket.status = `${repair.status} by ${technician.lastname}`;
+                ticket.status = `In Progress`;
+                ticket.technician = `${technician.lastname} ${technician.initials}`
 
                 repair.save();
             }
 
             else {
-                ticket.status = 'Done';
+                const rep = await Repair.findOne({
+                    condition: {
+                        id: body.ticket_id
+                    }
+                });
+
+                rep.status = 'closed';
+
+                rep.save()
+
+                ticket.status = 'Closed';
             }
 
             ticket.save();

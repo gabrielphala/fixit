@@ -20,7 +20,7 @@ const uTicketHeader = [
 ]
 
 const uAllowedColumns = [
-    'ticket_no', 'item_count', 'status', 'added_on'
+    'ref_no', 'item_count', 'status', 'added_on'
 ]
 
 const tTicketHeader = [
@@ -28,7 +28,7 @@ const tTicketHeader = [
 ]
 
 const tAllowedColumns = [
-    'ticket_no', 'item_count', 'status', 'lastname', 'added_on'
+    'ref_no', 'item_count', 'status', 'lastname', 'added_on'
 ]
 
 export default class Ticket {

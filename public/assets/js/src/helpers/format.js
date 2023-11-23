@@ -35,7 +35,8 @@ export const formatTicketsUser = (tickets) => {
         formated += `
             <ul class="table__body__row table__body__row--ticket" data-ticketid="${ticket.id}">
                 <li class="table__body__row__item">${count}</li>
-                <li class="table__body__row__item">${ticket.ticket_no}</li>
+                <li class="table__body__row__item">${ticket.ref_no}</li>
+                <li class="table__body__row__item">${ticket.technician}</li>
                 <li class="table__body__row__item">${ticket.item_count}</li>
                 <li class="table__body__row__item">${ticket.status}</li>
                 <li class="table__body__row__item">${getStaticDate(ticket.added_on)}</li>
@@ -57,7 +58,7 @@ export const formatTicketsAdmin = (tickets) => {
                 <li class="table__body__row__item">${count}</li>
                 <li class="table__body__row__item">${ticket.cust_lastname} ${ticket.cust_initials}</li>
                 <li class="table__body__row__item">${ticket.technician_lastname} ${ticket.technician_initials}</li>
-                <li class="table__body__row__item">${ticket.ticket_no}</li>
+                <li class="table__body__row__item">${ticket.ref_no}</li>
                 <li class="table__body__row__item">${ticket.item_count}</li>
                 <li class="table__body__row__item">${ticket.status}</li>
                 <li class="table__body__row__item">${getStaticDate(ticket.added_on)}</li>
@@ -77,7 +78,7 @@ export const formatTicketsTechnician = (tickets) => {
         formated += `
             <ul class="table__body__row table__body__row--ticket" data-ticketid="${ticket.id}">
                 <li class="table__body__row__item" style="flex: 0 0 3rem;">${count}</li>
-                <li class="table__body__row__item">${ticket.ticket_no}</li>
+                <li class="table__body__row__item">${ticket.ref_no}</li>
                 <li class="table__body__row__item">${ticket.status}</li>
                 <li class="table__body__row__item">${ticket.lastname} ${ticket.initials}</li>
                 <li class="table__body__row__item">${getStaticDate(ticket.added_on)}</li>
@@ -109,7 +110,7 @@ export const formatRepairHistory = (repairs) => {
             <ul class="table__body__row table__body__row--repair" data-repairid="${repair.id}">
                 <li class="table__body__row__item">${count}</li>
                 <li class="table__body__row__item">${repair.item}</li>
-                <li class="table__body__row__item">${repair.ticket_no}</li>
+                <li class="table__body__row__item">${repair.ref_no}</li>
                 <li class="table__body__row__item">${repair._ticket_status}</li>
                 <li class="table__body__row__item">${getStaticDate(repair.added_on)}</li>
             </ul>
