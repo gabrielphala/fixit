@@ -14,4 +14,5 @@ module.exports = (router) => {
     router.post('/ticket/search-closed', base_controller.wrap_with_store(ticket_service.search_done));
     router.post('/ticket/search', base_controller.wrap_with_store(ticket_service.search_tickets));
     router.post('/ticket/search-by-technician', base_controller.wrap_with_store(ticket_service.search_tickets_technician));
+    router.post('/ticket/search-by-admin', base_controller.wrap_with_store(ticket_service.admin_search_all));
 };

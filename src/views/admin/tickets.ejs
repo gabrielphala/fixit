@@ -14,10 +14,10 @@
         <div class="container__main__center" style="padding: 0 15%;">
           <div class="container__main__center__search">
             <div class="container__main__center__search__search-box input">
-              <!-- <input type="text" name="" id="query" placeholder="Search">
+              <input type="text" id="query" placeholder="Search">
               <svg class="image--icon pos--abs pos--vertical">
                 <use href="#search"></use>
-              </svg> -->
+              </svg>
             </div>
             <div class="container__main__center__search__options flex flex--j-space-between">
               <div class="container__main__center__search__options__filter flex flex--a-center">
@@ -76,5 +76,9 @@
 		$('#download-report').on('click', e => {
 			Ticket.downloadAdminCSV();
 		});
+
+    $('#query').on('keyup', e => {
+      Ticket.adminSearchAll();
+    })
 	})
 </script>

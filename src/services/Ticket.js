@@ -130,6 +130,14 @@ module.exports = class TicketService {
         } catch (e) { throw e; }
     }
 
+    static async admin_search_all (wrap_res, body, { user_info }) {
+        try {
+            wrap_res.tickets = await Ticket.admin_search_all(body.query);
+
+            return wrap_res;
+        } catch (e) { throw e; }
+    }
+
     // static async search_tickets_admin (wrap_res, body) {
     //     try {
     //         wrap_res.tickets = await Ticket.search_tickets_admin(body.query);

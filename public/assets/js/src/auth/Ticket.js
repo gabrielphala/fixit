@@ -296,6 +296,26 @@ export default class Ticket {
         return $('#ticket-list').html('');
     }
 
+    static async adminSearchAll () {
+        const response = await fetch(`/ticket/search-by-admin`, {
+            body: {
+                query: $('#query').val()
+            }
+        }) 
+
+        if (arrayNotEmpty(response.tickets)) {
+            cachedAdminTickets = response.tickets;
+
+            $('#no-tickets').hide();
+            return $('#ticket-list').html(formatTicketsAdmin(response.tickets));
+        }
+
+        cachedAdminTickets = []
+            
+        $('#no-tickets').show();
+        return $('#ticket-list').html('');
+    }
+
     static async downloadUserCSV () {
         const response = await fetch('/download/csv', {
             body: {

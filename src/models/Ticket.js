@@ -33,6 +33,23 @@ module.exports = new (class Ticket extends SQLifier {
         `)
     }
 
+    admin_search_all (query) {
+        return this.raw(`
+            SELECT 
+                ref_no, status, item_count, ticket.added_on,
+                cust.lastname as cust_lastname,
+                cust.initials as cust_initials,
+                technician.lastname as technician_lastname,
+                technician.initials as technician_initials
+            FROM ticket
+            INNER JOIN user cust 
+            ON ticket.user_id = cust.id
+            INNER JOIN user technician 
+            ON ticket.cur_technician_id = technician.id
+            WHERE item_count LIKE '%${query}%' OR ref_no LIKE '%${query}%' OR cust.lastname LIKE '%${query}%' OR technician.lastname LIKE '%${query}%' OR status LIKE '%${query}%'
+        `)
+    }
+
     getById (id) {
         return this.findOne({
             condition: { id }
