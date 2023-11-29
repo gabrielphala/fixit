@@ -14,10 +14,10 @@
         <div class="container__main__center" style="padding: 0 15%;">
           <div class="container__main__center__search">
             <div class="container__main__center__search__search-box input">
-              <input type="text" name="" id="query" placeholder="Search">
+              <!-- <input type="text" name="" id="query" placeholder="Search">
               <svg class="image--icon pos--abs pos--vertical">
                 <use href="#search"></use>
-              </svg>
+              </svg> -->
             </div>
             <div class="container__main__center__search__options flex flex--j-space-between">
               <div class="container__main__center__search__options__filter flex flex--a-center">
@@ -41,7 +41,7 @@
                 <li class="table__header__row__item">#</li>
                 <li class="table__header__row__item">Customer</li>
                 <li class="table__header__row__item">Technical</li>
-                <li class="table__header__row__item">Unique no</li>
+                <li class="table__header__row__item">Ticket no</li>
                 <li class="table__header__row__item">Items</li>
 				<li class="table__header__row__item">Status</li>
 				<li class="table__header__row__item">Created on</li>
@@ -72,5 +72,9 @@
 
 	$(() => {
 		Ticket.fetch_all_for_admin();
+
+		$('#download-report').on('click', e => {
+			Ticket.downloadAdminCSV();
+		});
 	})
 </script>

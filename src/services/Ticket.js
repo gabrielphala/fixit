@@ -130,6 +130,14 @@ module.exports = class TicketService {
         } catch (e) { throw e; }
     }
 
+    // static async search_tickets_admin (wrap_res, body) {
+    //     try {
+    //         wrap_res.tickets = await Ticket.search_tickets_admin(body.query);
+
+    //         return wrap_res;
+    //     } catch (e) { throw e; }
+    // }
+
     static async search_done (wrap_res, body, { user_info }) {
         try {
             if (!(/^[a-zA-Z0-9]+$/.test(body.query))) throw 'Search term should be alphabets or numbers'

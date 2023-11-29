@@ -14,6 +14,7 @@ import {
 
 let cachedUserTickets = [];
 let cachedTechnicianTickets = [];
+let cachedAdminTickets = []
 
 const uTicketHeader = [
     '#', 'Ticket no', 'Issue Count', 'Status', 'Request date'
@@ -30,6 +31,9 @@ const tTicketHeader = [
 const tAllowedColumns = [
     'ref_no', 'item_count', 'status', 'lastname', 'added_on'
 ]
+
+const aTicketHeader = ['Customer', 'Technical', 'Ticket no', 'Items', 'Status', 'Created on']
+const aAllowedColumns = ['cust_lastname', 'technician_lastname', 'ref_no', 'item_count', 'status', 'added_on']
 
 export default class Ticket {
     static async add () {
@@ -150,9 +154,13 @@ export default class Ticket {
         const response = await fetch(`/ticket/fetch/all`) 
 
         if (arrayNotEmpty(response.tickets)) {
+            cachedAdminTickets = response.tickets;
+
             $('#no-tickets').hide();
             return $('#ticket-list').html(formatTicketsAdmin(response.tickets));
         }
+
+        cachedAdminTickets = []
             
         $('#no-tickets').show();
         return $('#ticket-list').html('');
@@ -313,6 +321,25 @@ export default class Ticket {
                 data: cachedTechnicianTickets,
                 tableHeader: tTicketHeader,
                 allowedColumns: tAllowedColumns,
+                reportName: 'Tickets'
+            }
+        });
+
+        if (response.successful) {
+            const anchor = $('#download-anchor')
+
+            anchor.attr('href', `/assets/downloads/tmp/${response.filename}`)
+
+            anchor[0].click();
+        }
+    }
+
+    static async downloadAdminCSV () {
+        const response = await fetch('/download/csv', {
+            body: {
+                data: cachedAdminTickets,
+                tableHeader: aTicketHeader,
+                allowedColumns: aAllowedColumns,
                 reportName: 'Tickets'
             }
         });
