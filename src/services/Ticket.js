@@ -236,7 +236,7 @@ module.exports = class TicketService {
         } catch (e) { throw e; }
     }
 
-    static async getTechniciansByRepairKind (wrap_res, body) {
+    static async getTechniciansByRepairKind (wrap_res, body, { user_info }) {
         try {
             const { ticket_id } = body;
             
@@ -256,6 +256,11 @@ module.exports = class TicketService {
                     id: 'technician_id'
                 }
             })
+
+            wrap_res.users.forEach((user, index) => {
+                if (user.technician_id == user_info.id)
+                    return wrap_res.users.splice(index, 1)
+             })
 
             wrap_res.successful = true;
 
